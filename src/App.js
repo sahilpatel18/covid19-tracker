@@ -4,29 +4,34 @@ import Chart from "./components/Chart/Chart";
 import CountryPicker from "./components/CountryPicker/CountryPicker";
 import styles from "./App.module.css";
 
-import { fetchData } from './api/index';
+import { fetchData } from "./api/index";
 
-class App extends React.Component{
+class App extends React.Component {
   state = {
     data: {},
-  }
-  async componentDidMount(){
-    const fetchedData = await fetchData()
-    this.setState({data: fetchedData})
+    country: "",
+  };
+  async componentDidMount() {
+    const fetchedData = await fetchData();
+    this.setState({ data: fetchedData });
   }
 
- render(){
-   const {data} = this.state
+  handleCountryChange = async (country) => {
+    const fetchedData = await fetchData(country);
+    this.setState({ data: fetchedData });
+  };
+
+  render() {
+    const { data, country } = this.state;
     return (
       <div className={styles.container}>
         <Cards data={data} />
-        <CountryPicker />
-        <Chart />
+        <CountryPicker handleCountryChange={this.handleCountryChange} />
+        <Chart data={data} country={country} />
       </div>
-    )
+    );
   }
 }
-
 
 // const App = () => {
 // const [data, setData] = useState([])
